@@ -1,0 +1,64 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="app">
+  <mat-toolbar color="primary">
+    <span>Map Property</span>
+  </mat-toolbar>
+  <div class="upload-section">
+    <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+    <input hidden (change)="onFileChange($event)" #fileInput type="file" id="file">
+  </div>
+  <div class="filter-section">
+    <div class="filter-item">
+      <mat-form-field>
+        <mat-label>Select Residence Type</mat-label>
+        <mat-select>
+          <mat-option (onSelectionChange)="onResidenceChange($event)" *ngFor="let res of resdType" [value]="res">
+            {{res}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="filter-item">
+      <mat-form-field>
+        <mat-label>Select Street</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let street of streets" [value]="street">
+            {{street}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="filter-item">
+      <mat-form-field class="input-item">
+        <input matInput placeholder="min"  [(ngModel)]='minPrice'>
+      </mat-form-field>
+      <mat-form-field class="input-item">
+        <input matInput placeholder="max"  [(ngModel)]='maxPrice'>
+      </mat-form-field>
+      <button mat-raised-button (click)="onFilterPriceClick()" >Filter</button>
+    </div>
+  </div>
+  <div class="map-section">
+    <agm-map class="map-section" [latitude]="lat" [longitude]="lng">
+      <div *ngFor="let site of propertyData">
+        <agm-circle [latitude]="site.Latitude" [longitude]="site.Longitude" [radius]="site.radius"
+          [fillColor]="site.color" (mouseOver)="infoWindow.open();" (mouseOut)="infoWindow.close();">
+
+          <agm-info-window [latitude]="site.Latitude" [longitude]="site.Longitude" [disableAutoPan]="false" #infoWindow>
+
+            <div>
+              <span>
+                <b>{{site.name +': '}} ({{site.budget | currency }}) </b>
+              </span>
+            </div>
+
+          </agm-info-window>
+        </agm-circle>
+      </div>
+      <!-- <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker> -->
+    </agm-map>
+  </div>
+</div>
+
+<!-- <input type="file" (change)="" multiple="false" /> -->
+<router-outlet></router-outlet>
